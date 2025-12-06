@@ -1,8 +1,13 @@
 import sqlite3
+import json
 import pandas as pd
 from bokeh.plotting import figure, curdoc
 from bokeh.models import ColumnDataSource, Select, MultiSelect, DataTable, TableColumn, CheckboxGroup
 from bokeh.layouts import column, row
+
+# Load configuration
+with open('config.json', 'r') as config_file:
+    config = json.load(config_file)
 
 DB_PATH = "data\db.sqlite"
 

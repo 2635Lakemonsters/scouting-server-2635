@@ -2,6 +2,11 @@ import os, json, sqlite3, shutil, time
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
+# Load configuration
+with open('config.json', 'r') as config_file:
+    config = json.load(config_file)
+    FIELDS = config['fields']
+
 DB_PATH = "data/db.sqlite"
 RAW_DIR = "data/raw/"
 PROC_DIR = "data/processed/"
@@ -9,32 +14,11 @@ PROC_DIR = "data/processed/"
 def init_db():
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    c.execute("""
+    # Build column definitions dynamically from config
+    column_defs = ", ".join([f"{field['name']} {field['type']}" for field in FIELDS])
+    c.execute(f"""
         CREATE TABLE IF NOT EXISTS matches (
-            timeStamp TEXT,
-            teamNumber TEXT,
-            matchNumber TEXT,
-            autoPoints INTEGER,
-            autoCanScoreAlgae INTEGER,
-            autoCanScoreCorrals INTEGER,
-            teleopPoints INTEGER,
-            canScoreCorralsL1 INTEGER,
-            canScoreCorralsL2 INTEGER,
-            canScoreCorralsL3 INTEGER,
-            canScoreCorralsL4 INTEGER,
-            canScoreAlgae INTEGER,
-            defenseAbility INTEGER,
-            endgamePoints INTEGER,
-            parkedInEndgame INTEGER,
-            climbedInEndgame INTEGER,
-            coOpAchieved INTEGER,
-            canPickupCoralFromFloor INTEGER,
-            canPickupCorralFromFeeder INTEGER,
-            canPickupAlgaeFromFloor INTEGER,
-            canPickupAlgaeFromReef INTEGER,
-            mobilitySpeed INTEGER,
-            reliabilityRating INTEGER,
-            scoutNotes TEXT,
+            {column_defs},
             UNIQUE(timeStamp, teamNumber, matchNumber) ON CONFLICT IGNORE
         )
     """)
@@ -44,34 +28,11 @@ def init_db():
 def insert_match(data):
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    c.execute("""
-        INSERT OR IGNORE INTO matches VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
-    """, (
-        data["timeStamp"],
-        data["teamNumber"],
-        data["matchNumber"],
-        data.get("autoPoints"),
-        data.get("autoCanScoreAlgae"),
-        data.get("autoCanScoreCorrals"),
-        data.get("teleopPoints"),
-        data.get("canScoreCorralsL1"),
-        data.get("canScoreCorralsL2"),
-        data.get("canScoreCorralsL3"),
-        data.get("canScoreCorralsL4"),
-        data.get("canScoreAlgae"),
-        data.get("defenseAbility"),
-        data.get("endgamePoints"),
-        data.get("parkedInEndgame"),
-        data.get("climbedInEndgame"),
-        data.get("coOpAchieved"),
-        data.get("canPickupCoralFromFloor"),
-        data.get("canPickupCorralFromFeeder"),
-        data.get("canPickupAlgaeFromFloor"),
-        data.get("canPickupAlgaeFromReef"),
-        data.get("mobilitySpeed"),
-        data.get("reliabilityRating"),
-        data.get("scoutNotes")
-    ))
+    field_names = [field['name'] for field in FIELDS]
+    placeholders = ", ".join(["?" for _ in FIELDS])
+    field_names_str = ", ".join(field_names)
+    values = tuple(data.get(field) for field in field_names)
+    c.execute(f"INSERT OR IGNORE INTO matches ({field_names_str}) VALUES ({placeholders})", values)
     conn.commit()
     conn.close()
 

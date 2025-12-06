@@ -2,22 +2,14 @@ import cv2, json, os
 from pyzbar.pyzbar import decode
 from datetime import datetime
 
-# TODO: Will be fed from a .json file in future
-KEYS = [
-    'timeStamp', 'teamNumber', 'matchNumber', 'autoPoints',
-    'autoCanScoreAlgae', 'autoCanScoreCorrals', 'teleopPoints',
-    'canScoreCorralsL1', 'canScoreCorralsL2', 'canScoreCorralsL3',
-    'canScoreCorralsL4', 'canScoreAlgae', 'defenseAbility',
-    'endgamePoints', 'parkedInEndgame', 'climbedInEndgame',
-    'coOpAchieved', 'canPickupCoralFromFloor',
-    'canPickupCorralFromFeeder', 'canPickupAlgaeFromFloor',
-    'canPickupAlgaeFromReef', 'mobilitySpeed', 'reliabilityRating',
-    'scoutNotes'
-]
+# Load field keys from config
+with open('config.json', 'r') as config_file:
+    config = json.load(config_file)
+    KEYS = [field['name'] for field in config['fields']]
 ARCHIVE_DIR = "data/raw/"
 os.makedirs(ARCHIVE_DIR, exist_ok=True)
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 seen = set()
 
 print("Scanning QR codes... Press 'q' to quit.")
