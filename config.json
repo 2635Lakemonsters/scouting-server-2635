@@ -1,28 +1,14 @@
 {
   "fields": [
-    {"name": "timeStamp", "type": "TEXT"},
-    {"name": "teamNumber", "type": "INTEGER"},
-    {"name": "matchNumber", "type": "INTEGER"},
-    {"name": "autoPoints", "type": "INTEGER"},
-    {"name": "autoCanScoreAlgae", "type": "INTEGER"},
-    {"name": "autoCanScoreCorrals", "type": "INTEGER"},
-    {"name": "teleopPoints", "type": "INTEGER"},
-    {"name": "canScoreCorralsL1", "type": "INTEGER"},
-    {"name": "canScoreCorralsL2", "type": "INTEGER"},
-    {"name": "canScoreCorralsL3", "type": "INTEGER"},
-    {"name": "canScoreCorralsL4", "type": "INTEGER"},
-    {"name": "canScoreAlgae", "type": "INTEGER"},
-    {"name": "defenseAbility", "type": "INTEGER"},
-    {"name": "endgamePoints", "type": "INTEGER"},
-    {"name": "parkedInEndgame", "type": "INTEGER"},
-    {"name": "climbedInEndgame", "type": "INTEGER"},
-    {"name": "coOpAchieved", "type": "INTEGER"},
-    {"name": "canPickupCoralFromFloor", "type": "INTEGER"},
-    {"name": "canPickupCorralFromFeeder", "type": "INTEGER"},
-    {"name": "canPickupAlgaeFromFloor", "type": "INTEGER"},
-    {"name": "canPickupAlgaeFromReef", "type": "INTEGER"},
-    {"name": "mobilitySpeed", "type": "INTEGER"},
-    {"name": "reliabilityRating", "type": "INTEGER"},
-    {"name": "scoutNotes", "type": "TEXT"}
+    { "name": "teamNumber", "type": "INTEGER" },
+    { "name": "matchNumber", "type": "INTEGER" },
+    { "name": "autoFuelScored", "type": "INTEGER" },
+    { "name": "autoCanClimb", "type": "INTEGER" },
+    { "name": "teleopFuelScored", "type": "INTEGER" },
+    { "name": "defenseAbility", "type": "INTEGER" },
+    { "name": "endgameClimb", "type": "INTEGER" },
+    { "name": "mobilitySpeed", "type": "INTEGER" },
+    { "name": "reliabilityRating", "type": "INTEGER" },
+    { "name": "scoutNotes", "type": "TEXT" }
   ]
 }
